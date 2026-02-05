@@ -3,175 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LotoArchitect V6 Stable :: High-Performance</title>
+    <title>LotoEngine V7 :: Smart Control</title>
     <style>
         :root {
-            --bg-app: #0f172a;
-            --bg-panel: #1e293b;
-            --bg-input: #334155;
-            --border: #475569;
-            --primary: #3b82f6;
-            --accent: #10b981;
-            --text-main: #f1f5f9;
-            --text-dim: #94a3b8;
-            --font-mono: 'Courier New', Courier, monospace;
+            --bg-body: #09090b;
+            --bg-panel: #18181b;
+            --bg-input: #27272a;
+            --border: #3f3f46;
+            --primary: #8b5cf6; /* Violeta Profissional */
+            --primary-hover: #7c3aed;
+            --accent: #10b981;  /* Verde Sucesso */
+            --danger: #ef4444;
+            --text-main: #f4f4f5;
+            --text-dim: #a1a1aa;
+            --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+            --radius: 6px;
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
         body {
-            margin: 0; background: var(--bg-app); color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; background-color: var(--bg-body); color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
             height: 100vh; display: grid; grid-template-rows: auto 1fr; overflow: hidden;
         }
 
-        /* Header */
+        /* HEADER */
         header {
             background: var(--bg-panel); border-bottom: 1px solid var(--border);
-            padding: 1rem; display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); z-index: 10;
+            padding: 0.8rem 1.2rem; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 20;
         }
-        .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; }
-        .brand span { color: var(--primary); }
-        .status-badge { 
-            font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; 
-            background: var(--bg-input); color: var(--text-dim); border: 1px solid var(--border);
-        }
+        .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; display: flex; align-items: center; gap:8px; }
+        .tag { font-size: 0.65rem; background: #3f3f46; padding: 2px 6px; border-radius: 4px; color: #fff; }
 
-        /* Layout */
-        main { display: grid; grid-template-columns: 300px 1fr; height: 100%; overflow: hidden; }
+        /* LAYOUT */
+        main { display: grid; grid-template-columns: 280px 1fr; height: 100%; overflow: hidden; }
 
-        /* Sidebar */
+        /* SIDEBAR */
         aside {
             background: var(--bg-panel); border-right: 1px solid var(--border);
-            padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
-            overflow-y: auto;
+            padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; overflow-y: auto;
         }
 
-        .input-group label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 5px; font-weight: bold; }
+        .section-label { 
+            font-size: 0.7rem; text-transform: uppercase; color: var(--primary); 
+            font-weight: 800; letter-spacing: 1px; margin-top: 10px; border-bottom: 1px solid var(--border);
+            padding-bottom: 4px;
+        }
+
+        .control-group { margin-bottom: 5px; }
+        label { display: block; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; font-weight: 600; }
+        
         input {
             width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-            color: #fff; padding: 12px; border-radius: 6px; font-size: 1rem; text-align: center;
-            font-family: var(--font-mono); font-weight: bold;
+            color: #fff; padding: 10px; border-radius: var(--radius);
+            font-family: var(--font-mono); text-align: center; font-size: 0.95rem;
+            transition: 0.2s;
         }
-        input:focus { border-color: var(--primary); }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2); }
+
+        /* INPUT ESPECIAL PARA LIMITE */
+        #inpMax { border-color: var(--accent); color: var(--accent); font-weight: bold; }
 
         button {
-            width: 100%; padding: 15px; border: none; border-radius: 6px;
-            font-weight: bold; text-transform: uppercase; cursor: pointer; margin-top: 10px;
-            font-size: 0.9rem; transition: 0.2s;
+            width: 100%; padding: 14px; border: none; border-radius: var(--radius);
+            font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+            margin-top: auto; transition: 0.2s;
         }
-        .btn-start { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
-        .btn-start:hover { background: #2563eb; }
-        .btn-start:disabled { background: var(--bg-input); color: var(--text-dim); cursor: wait; transform: none; box-shadow: none;}
+        .btn-run { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25); }
+        .btn-run:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-run:active { transform: translateY(1px); }
+        .btn-run:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-csv { 
+            background: transparent; border: 1px dashed var(--border); color: var(--text-dim); margin-top: 10px; 
+            display: none; font-size: 0.8rem;
+        }
+        .btn-csv:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* AREA VISUAL */
+        .workspace {
+            display: grid; grid-template-rows: auto auto 1fr; padding: 1.5rem; gap: 1rem;
+            overflow: hidden; background: radial-gradient(circle at top right, #18181b 0%, #09090b 50%);
+        }
+
+        /* METRICAS */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .kpi-card {
+            background: rgba(39, 39, 42, 0.6); border: 1px solid var(--border);
+            padding: 10px; border-radius: var(--radius); text-align: center;
+        }
+        .kpi-val { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: #fff; }
+        .kpi-lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; }
         
-        .btn-down { background: transparent; border: 1px dashed var(--border); color: var(--text-dim); display: none; }
-        .btn-down:hover { border-color: var(--accent); color: var(--accent); }
+        .val-coverage { color: var(--accent); }
 
-        /* Dashboard */
-        .dashboard { padding: 1.5rem; display: grid; grid-template-rows: auto auto 1fr; gap: 1rem; overflow: hidden; }
-
-        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .stat-box { background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 10px; border-radius: 8px; text-align: center; }
-        .stat-val { font-size: 1.3rem; font-weight: bold; font-family: var(--font-mono); }
-        .stat-lbl { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; }
-
-        .console-area {
-            background: #000; border: 1px solid var(--border); border-radius: 6px;
-            padding: 10px; font-family: var(--font-mono); font-size: 0.8rem;
-            color: var(--text-dim); height: 80px; overflow-y: auto; display: flex; flex-direction: column-reverse;
-        }
-        .log-err { color: #ef4444; }
-        .log-ok { color: #10b981; }
-
-        .progress-bar { height: 4px; background: var(--bg-input); width: 100%; border-radius: 2px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
-
-        /* Table */
-        .table-container { 
-            border: 1px solid var(--border); border-radius: 8px; background: var(--bg-panel);
-            overflow: auto; position: relative; 
-        }
-        table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); }
-        th { background: #111; position: sticky; top: 0; padding: 10px; text-align: left; color: var(--text-dim); font-size: 0.75rem; z-index: 2; }
-        td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        /* CONSOLE & PROGRESSO */
+        .feedback-area { display: flex; flex-direction: column; gap: 8px; }
         
+        .progress-track { height: 6px; background: var(--bg-input); border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+
+        .log-box {
+            font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim);
+            height: 20px; display: flex; align-items: center; white-space: nowrap; overflow: hidden;
+        }
+
+        /* TABELA */
+        .table-wrap {
+            border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-panel);
+            overflow: auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+        }
+        table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.9rem; }
+        th { 
+            background: #111; position: sticky; top: 0; padding: 12px; text-align: left;
+            color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; border-bottom: 1px solid var(--border);
+            z-index: 10;
+        }
+        td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:nth-child(even) { background: rgba(255,255,255,0.01); }
+
         .ball {
-            display: inline-block; width: 24px; height: 24px; line-height: 24px;
-            text-align: center; border-radius: 50%; background: #334155; margin-right: 3px;
-            font-size: 0.75rem; font-weight: bold; color: #fff;
+            display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center;
+            border-radius: 50%; background: #27272a; margin-right: 3px; font-size: 0.8rem; font-weight: 700;
+            border: 1px solid #3f3f46; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
         }
 
-        /* Mobile */
+        /* MOBILE */
         @media (max-width: 768px) {
             body { display: block; overflow-y: auto; }
             main { display: block; }
             aside { border-right: none; border-bottom: 1px solid var(--border); }
-            .dashboard { height: 600px; }
-            .stats { grid-template-columns: 1fr 1fr; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .workspace { height: 600px; padding: 1rem; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="brand">LOTO<span>ARCHITECT</span> V6</div>
-    <div id="statusTag" class="status-badge">PRONTO</div>
+    <div class="brand">
+        <span style="color:var(--primary)">LOTO</span>ENGINE <span class="tag">V7 CONTROL</span>
+    </div>
 </header>
 
 <main>
     <aside>
-        <div class="input-group">
-            <label>TOTAL DEZENAS (N)</label>
+        <div class="section-label">Parâmetros Matemáticos</div>
+        <div class="control-group">
+            <label>Total Dezenas (N)</label>
             <input type="number" id="inpN" value="25">
         </div>
-        <div class="input-group">
-            <label>DEZENAS P/ JOGO (K)</label>
+        <div class="control-group">
+            <label>Dezenas por Jogo (K)</label>
             <input type="number" id="inpK" value="15">
         </div>
-        <div class="input-group">
-            <label>ACERTOS COND. (C)</label>
+        <div class="control-group">
+            <label>Condição Acerto (C)</label>
             <input type="number" id="inpC" value="14">
         </div>
-        <div class="input-group">
-            <label>GARANTIA (G)</label>
+        <div class="control-group">
+            <label>Garantia (G)</label>
             <input type="number" id="inpG" value="14">
         </div>
 
-        <button id="btnRun" class="btn-start" onclick="startSystem()">GERAR MATRIZ</button>
-        <button id="btnCsv" class="btn-down" onclick="downloadCsv()">BAIXAR CSV</button>
+        <div class="section-label" style="margin-top: 20px;">Orçamento (Filtro)</div>
+        <div class="control-group">
+            <label style="color:var(--accent)">MÁXIMO DE JOGOS</label>
+            <input type="number" id="inpMax" value="10" min="1" placeholder="Ex: 10">
+        </div>
+
+        <button class="btn-run" id="btnRun" onclick="Controller.start()">PROCESSAR AGORA</button>
+        <button class="btn-csv" id="btnCsv" onclick="Controller.export()">BAIXAR CSV</button>
     </aside>
 
-    <div class="dashboard">
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-val" id="valGames">0</div>
-                <div class="stat-lbl">Jogos</div>
+    <div class="workspace">
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-val" id="dispGames">0</div>
+                <div class="kpi-lbl">Jogos Gerados</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-val" id="valTime">0s</div>
-                <div class="stat-lbl">Tempo</div>
+            <div class="kpi-card">
+                <div class="kpi-val val-coverage" id="dispCover">0%</div>
+                <div class="kpi-lbl">Força (Cobertura)</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-val" id="valUniverse">0</div>
-                <div class="stat-lbl">Cenários</div>
+            <div class="kpi-card">
+                <div class="kpi-val" id="dispUniverse">0</div>
+                <div class="kpi-lbl">Cenários Totais</div>
             </div>
-            <div class="stat-box">
-                <div class="stat-val" id="valCover">0%</div>
-                <div class="stat-lbl">Cobertura</div>
-            </div>
-        </div>
-
-        <div style="display:flex; flex-direction:column; gap:5px;">
-            <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
-            <div class="console-area" id="consoleLog">
-                <div>> Sistema V6 Inicializado.</div>
+            <div class="kpi-card">
+                <div class="kpi-val" id="dispTime">0s</div>
+                <div class="kpi-lbl">Tempo</div>
             </div>
         </div>
 
-        <div class="table-container">
+        <div class="feedback-area">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="log-box" id="consoleLog">> Aguardando configuração...</div>
+        </div>
+
+        <div class="table-wrap">
             <table id="resTable">
-                <thead><tr><th>#</th><th>DEZENAS GERADAS</th></tr></thead>
+                <thead>
+                    <tr><th width="50">#</th><th>COMBINAÇÃO OTIMIZADA</th></tr>
+                </thead>
                 <tbody id="resBody"></tbody>
             </table>
         </div>
@@ -179,306 +217,318 @@
 </main>
 
 <script id="worker-code" type="javascript/worker">
-    // Helpers Matemáticos
-    function combinationCount(n, k) {
-        if (k < 0 || k > n) return 0;
-        if (k === 0 || k === n) return 1;
-        if (k > n / 2) k = n - k;
-        let res = 1;
-        for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
-        return res;
-    }
+/**
+ * WORKER DE ALTA PERFORMANCE V7
+ * Foco: Maximizar cobertura dentro de um limite fixo de jogos.
+ */
 
-    // Gerador de combinações iterativo (seguro contra stack overflow)
-    function getCombinations(n, k, limit) {
-        const result = [];
-        const combo = [];
-        for (let i = 0; i < k; i++) combo[i] = i + 1;
-        
-        // Push first
-        result.push([...combo]);
-        if (limit && result.length >= limit) return result;
+// Math Utils
+function combinationsCount(n, k) {
+    if (k < 0 || k > n) return 0;
+    if (k == 0 || k == n) return 1;
+    if (k > n / 2) k = n - k;
+    let res = 1;
+    for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
+    return res;
+}
 
-        while (true) {
-            let i = k - 1;
-            while (i >= 0 && combo[i] === n - k + i + 1) i--;
-            if (i < 0) break;
-            
-            combo[i]++;
-            for (let j = i + 1; j < k; j++) combo[j] = combo[j - 1] + 1;
-            
-            result.push([...combo]);
-            if (limit && result.length >= limit) break;
-        }
-        return result;
-    }
+// Bitmask Utils (BigInt)
+const toMask = (arr) => arr.reduce((acc, n) => acc | (1n << BigInt(n-1)), 0n);
+const popCount = (n) => {
+    let c = 0;
+    while(n > 0n) { n &= (n - 1n); c++; }
+    return c;
+};
+const fromMask = (m, n) => {
+    let res = [];
+    for(let i=0; i<n; i++) if(m & (1n << BigInt(i))) res.push(i+1);
+    return res;
+};
 
-    // Bitmask Helpers (BigInt)
-    function toMask(arr) {
-        let mask = 0n;
-        for (let i = 0; i < arr.length; i++) mask |= (1n << BigInt(arr[i] - 1));
-        return mask;
-    }
+self.onmessage = function(e) {
+    const { N, K, C, G, maxGames } = e.data;
+    const startT = Date.now();
 
-    function popCount(n) {
-        let c = 0;
-        while (n > 0n) { n &= (n - 1n); c++; }
-        return c;
-    }
+    try {
+        self.postMessage({ type: 'log', text: 'Mapeando universo combinatório...' });
 
-    function fromMask(mask, n) {
-        const res = [];
-        for (let i = 0; i < n; i++) if (mask & (1n << BigInt(i))) res.push(i + 1);
-        return res;
-    }
+        // 1. Gera ou Amostra o Universo (Cenários a cobrir)
+        const totalSize = combinationsCount(N, C);
+        const MAX_EXACT = 300000;
+        let universe = [];
+        let isSampled = false;
 
-    // --- MENSAGENS ---
-    self.onmessage = function(e) {
-        const { N, K, C, G } = e.data;
-        const startTime = Date.now();
-
-        try {
-            self.postMessage({ type: 'log', msg: 'Worker Iniciado. Calculando universo...' });
-
-            const universeSize = combinationCount(N, C);
-            self.postMessage({ type: 'stats', universe: universeSize });
-
-            // Estratégia Híbrida
-            let universeMasks = [];
-            const LIMIT_EXACT = 500000; // Limite para modo exato
-
-            if (universeSize <= LIMIT_EXACT) {
-                // Modo Exato
-                const combos = getCombinations(N, C);
-                universeMasks = combos.map(c => toMask(c));
-                self.postMessage({ type: 'log', msg: `Modo EXATO: ${universeMasks.length} cenários.` });
-            } else {
-                // Modo Probabilístico (evita travar)
-                self.postMessage({ type: 'log', msg: 'Universo muito grande. Usando modo PROBABILÍSTICO.' });
-                // Gera 100k cenários aleatórios para testar cobertura
-                const sampleSize = 100000;
-                const seen = new Set();
-                let fails = 0;
-                while(universeMasks.length < sampleSize && fails < 50000) {
-                    const pool = Array.from({length:N}, (_,i)=>i+1);
-                    // Shuffle parcial
-                    for(let i=0; i<C; i++) {
-                        const r = i + Math.floor(Math.random() * (N-i));
-                        [pool[i], pool[r]] = [pool[r], pool[i]];
-                    }
-                    const m = toMask(pool.slice(0, C));
-                    if (!seen.has(m)) {
-                        seen.add(m);
-                        universeMasks.push(m);
-                        fails = 0;
-                    } else fails++;
-                }
+        // Função geradora de combinações
+        function* genCombos(n, k) {
+            const arr = Array.from({length:k}, (_,i)=>i+1);
+            yield arr.slice();
+            while(true) {
+                let i = k - 1;
+                while(i >= 0 && arr[i] == n - k + i + 1) i--;
+                if(i < 0) break;
+                arr[i]++;
+                for(let j=i+1; j<k; j++) arr[j] = arr[j-1] + 1;
+                yield arr.slice();
             }
+        }
 
-            // OTIMIZAÇÃO GULOSA (GREEDY)
-            let solution = [];
-            let uncovered = [...universeMasks]; // Copia
-            const initialCount = uncovered.length;
+        if (totalSize <= MAX_EXACT) {
+            for (const c of genCombos(N, C)) universe.push(toMask(c));
+        } else {
+            isSampled = true;
+            self.postMessage({ type: 'log', text: 'Universo vasto: usando amostragem estatística.' });
+            const sampleSize = 100000;
+            const seen = new Set();
+            let safe = 0;
+            while(universe.length < sampleSize && safe < 500000) {
+                const pool = Array.from({length:N}, (_,i)=>i+1);
+                // Fisher-Yates parcial
+                for(let i=0; i<C; i++) {
+                    const r = i + Math.floor(Math.random() * (N - i));
+                    [pool[i], pool[r]] = [pool[r], pool[i]];
+                }
+                const m = toMask(pool.slice(0,C));
+                if(!seen.has(m)) {
+                    seen.add(m);
+                    universe.push(m);
+                }
+                safe++;
+            }
+        }
 
-            self.postMessage({ type: 'log', msg: 'Iniciando otimização...' });
+        const universeSizeInitial = universe.length;
+        self.postMessage({ type: 'stats', universe: isSampled ? totalSize : universeSizeInitial });
 
-            while (uncovered.length > 0) {
-                // Escolhe um cenário não coberto (o primeiro da lista)
-                const targetMask = uncovered[0];
+        // 2. OTIMIZAÇÃO GULOSA (BEST-FIT)
+        // O objetivo é encontrar o jogo que cobre o MAIOR número de cenários restantes
+        // Repetir até atingir o limite de jogos ou cobertura total.
+
+        let solution = [];
+        let uncovered = [...universe]; // Working set
+
+        self.postMessage({ type: 'log', text: 'Calculando jogos mais eficientes...' });
+
+        while (uncovered.length > 0 && solution.length < maxGames) {
+            
+            // Para ser "Enxuto", precisamos do melhor jogo possível nesta iteração.
+            // Heurística: Pega um cenário não coberto e tenta expandí-lo para K números
+            // de forma que cubra o máximo de outros cenários.
+            
+            let bestMask = 0n;
+            let bestHits = -1;
+            
+            // Número de tentativas para encontrar o melhor jogo "da vez"
+            // Quanto mais tentativas, mais compacta a matriz (mas mais lento)
+            const attempts = 300; 
+            
+            // Focamos nos cenários restantes (target)
+            // Pegamos aleatoriamente alguns alvos difíceis para basear a busca
+            
+            for(let t=0; t<attempts; t++) {
+                // Pega um cenário aleatório dos que SOBRARAM (isso força o algoritmo a resolver o problema)
+                const targetIdx = Math.floor(Math.random() * uncovered.length);
+                const targetMask = uncovered[targetIdx];
                 const targetArr = fromMask(targetMask, N);
-
-                // Tenta gerar o melhor jogo que cubra este cenário + outros
-                let bestGameMask = 0n;
-                let bestCoverCount = -1;
-
-                // Tenta 100 variações para cobrir o alvo
-                for (let t = 0; t < 100; t++) {
-                    const pool = Array.from({length:N}, (_,i)=>i+1).filter(x => !targetArr.includes(x));
-                    // Shuffle restante
-                    for (let i = pool.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [pool[i], pool[j]] = [pool[j], pool[i]];
-                    }
-                    
-                    // Completa o jogo: Target + Aleatórios
-                    // (Simplificação: assume K >= C)
-                    const fill = pool.slice(0, K - C);
-                    const gameArr = targetArr.concat(fill);
-                    const gameMask = toMask(gameArr);
-
-                    // Verifica impacto
-                    let hits = 0;
-                    // Amostragem para performance se lista for grande
-                    const step = uncovered.length > 5000 ? 10 : 1;
-                    for (let u = 0; u < uncovered.length; u += step) {
-                        if (popCount(gameMask & uncovered[u]) >= G) hits++;
-                    }
-
-                    if (hits > bestCoverCount) {
-                        bestCoverCount = hits;
-                        bestGameMask = gameMask;
-                    }
+                
+                // Completa com números aleatórios que não estão no target
+                const remainingNums = Array.from({length:N}, (_,i)=>i+1).filter(x => !targetArr.includes(x));
+                
+                // Shuffle simples nos restantes
+                for (let i = remainingNums.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [remainingNums[i], remainingNums[j]] = [remainingNums[j], remainingNums[i]];
                 }
-
-                solution.push(bestGameMask);
-
-                // Remove cobertos
-                uncovered = uncovered.filter(u => popCount(bestGameMask & u) < G);
-
-                // Reporta progresso
-                if (solution.length % 5 === 0 || uncovered.length === 0) {
-                    const pct = ((initialCount - uncovered.length) / initialCount) * 100;
-                    self.postMessage({ 
-                        type: 'progress', 
-                        pct: pct, 
-                        games: solution.length 
-                    });
+                
+                // Monta candidato
+                const fillNeeded = K - targetArr.length;
+                let candidateArr;
+                
+                if (fillNeeded > 0) {
+                     candidateArr = targetArr.concat(remainingNums.slice(0, fillNeeded));
+                } else {
+                     candidateArr = targetArr.slice(0, K); // Caso C > K (raro)
+                }
+                
+                const candMask = toMask(candidateArr);
+                
+                // Avalia: Quantos do 'uncovered' este candMask mata?
+                let hits = 0;
+                // Amostragem de verificação para performance
+                const checkStep = uncovered.length > 5000 ? 5 : 1;
+                
+                for(let u=0; u<uncovered.length; u+=checkStep) {
+                    if (popCount(candMask & uncovered[u]) >= G) hits++;
+                }
+                
+                if (hits > bestHits) {
+                    bestHits = hits;
+                    bestMask = candMask;
                 }
             }
-
-            // Converter final
-            const finalGames = solution.map(m => fromMask(m, N).sort((a,b)=>a-b));
             
-            self.postMessage({ 
-                type: 'done', 
-                games: finalGames,
-                time: Date.now() - startTime
-            });
+            if (bestHits <= 0) {
+                // Fallback de segurança se travar
+                break;
+            }
 
-        } catch (e) {
-            self.postMessage({ type: 'error', msg: e.message });
+            solution.push(bestMask);
+            
+            // Remove os cobertos
+            uncovered = uncovered.filter(u => popCount(bestMask & u) < G);
+            
+            // Progresso Visual
+            const pct = Math.round((solution.length / maxGames) * 100);
+            const coverage = ((universeSizeInitial - uncovered.length) / universeSizeInitial) * 100;
+            
+            if (solution.length % 2 === 0 || solution.length === maxGames) {
+                self.postMessage({ 
+                    type: 'progress', 
+                    pct: pct, 
+                    realCoverage: coverage,
+                    games: solution.length
+                });
+            }
         }
-    };
+
+        // Finaliza
+        const finalCoverage = ((universeSizeInitial - uncovered.length) / universeSizeInitial) * 100;
+        const resultGames = solution.map(m => fromMask(m, N).sort((a,b)=>a-b));
+        
+        // Ordenação Visual da Matriz
+        resultGames.sort((a,b) => {
+             for(let i=0; i<a.length; i++) if(a[i]!==b[i]) return a[i]-b[i];
+             return 0;
+        });
+
+        self.postMessage({ 
+            type: 'done', 
+            games: resultGames, 
+            coverage: finalCoverage,
+            time: Date.now() - startT
+        });
+
+    } catch (err) {
+        self.postMessage({ type: 'error', msg: err.message });
+    }
+};
 </script>
 
 <script>
-    // --- CONTROLLER PRINCIPAL ---
-    let worker = null;
-    let gamesData = [];
+const Controller = {
+    worker: null,
+    data: [],
 
-    function log(msg, type='info') {
-        const box = document.getElementById('consoleLog');
-        const d = document.createElement('div');
-        d.textContent = "> " + msg;
-        if(type==='err') d.className = 'log-err';
-        if(type==='ok') d.className = 'log-ok';
-        box.prepend(d);
-    }
+    init: function() {
+        const blob = new Blob([document.getElementById('worker-code').textContent], {type: 'text/javascript'});
+        this.workerUrl = URL.createObjectURL(blob);
+    },
 
-    function startSystem() {
+    start: function() {
         const N = parseInt(document.getElementById('inpN').value);
         const K = parseInt(document.getElementById('inpK').value);
         const C = parseInt(document.getElementById('inpC').value);
         const G = parseInt(document.getElementById('inpG').value);
+        const maxGames = parseInt(document.getElementById('inpMax').value);
 
-        // Validações Básicas
-        if (K > N) return log('Erro: K maior que N', 'err');
-        if (G > K) return log('Erro: Garantia impossível', 'err');
+        if (!maxGames || maxGames < 1) return alert("Defina um limite de jogos válido!");
+        if (K > N) return alert("K não pode ser maior que N");
 
         // UI Reset
-        document.getElementById('btnRun').disabled = true;
-        document.getElementById('btnRun').innerText = "PROCESSANDO...";
-        document.getElementById('btnCsv').style.display = 'none';
-        document.getElementById('statusTag').innerText = "RODANDO";
-        document.getElementById('statusTag').style.color = "#f59e0b";
+        this.setRunning(true);
         document.getElementById('resBody').innerHTML = '';
-        document.getElementById('progFill').style.width = '0%';
-        gamesData = [];
+        document.getElementById('dispCover').innerText = '0%';
+        document.getElementById('dispGames').innerText = '0';
+        document.getElementById('progressBar').style.width = '0%';
+        this.data = [];
 
-        // Criar Worker via Blob (Mais seguro)
-        if (worker) worker.terminate();
+        if (this.worker) this.worker.terminate();
+        this.worker = new Worker(this.workerUrl);
+
+        this.worker.postMessage({ N, K, C, G, maxGames });
+
+        this.worker.onmessage = (e) => {
+            const d = e.data;
+            if (d.type === 'log') this.log(d.text);
+            if (d.type === 'stats') {
+                document.getElementById('dispUniverse').innerText = d.universe > 1000000 ? '>1M' : d.universe.toLocaleString();
+            }
+            if (d.type === 'progress') {
+                document.getElementById('progressBar').style.width = d.pct + '%';
+                document.getElementById('dispGames').innerText = d.games;
+                document.getElementById('dispCover').innerText = d.realCoverage.toFixed(2) + '%';
+            }
+            if (d.type === 'done') {
+                this.finish(d);
+            }
+            if (d.type === 'error') {
+                this.log("ERRO: " + d.msg);
+                this.setRunning(false);
+            }
+        };
+    },
+
+    finish: function(d) {
+        this.data = d.games;
+        this.setRunning(false);
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('dispTime').innerText = (d.time / 1000).toFixed(1) + 's';
+        document.getElementById('dispCover').innerText = d.coverage.toFixed(3) + '%';
+        this.log(`Concluído. Cobertura final: ${d.coverage.toFixed(2)}% com ${d.games.length} jogos.`);
         
-        try {
-            const blob = new Blob([document.getElementById('worker-code').textContent], { type: "text/javascript" });
-            worker = new Worker(URL.createObjectURL(blob));
+        this.renderTable(d.games);
+        document.getElementById('btnCsv').style.display = 'inline-block';
+    },
 
-            worker.onmessage = function(e) {
-                const d = e.data;
-                if (d.type === 'log') log(d.msg);
-                if (d.type === 'error') {
-                    log('ERRO WORKER: ' + d.msg, 'err');
-                    stopSystem(false);
-                }
-                if (d.type === 'stats') {
-                    document.getElementById('valUniverse').innerText = d.universe > 1000000 ? '>1M' : d.universe;
-                }
-                if (d.type === 'progress') {
-                    document.getElementById('progFill').style.width = d.pct + '%';
-                    document.getElementById('valCover').innerText = d.pct.toFixed(1) + '%';
-                    document.getElementById('valGames').innerText = d.games;
-                }
-                if (d.type === 'done') {
-                    finish(d.games, d.time);
-                }
-            };
-
-            worker.onerror = function(e) {
-                log('Falha grave no Worker. Verifique console.', 'err');
-                stopSystem(false);
-            };
-
-            log('Enviando dados para processamento...');
-            worker.postMessage({ N, K, C, G });
-
-        } catch (err) {
-            log('Erro ao iniciar sistema: ' + err.message, 'err');
-            stopSystem(false);
-        }
-    }
-
-    function finish(games, time) {
-        gamesData = games;
-        document.getElementById('valTime').innerText = (time/1000).toFixed(1) + 's';
-        document.getElementById('valCover').innerText = "100%";
-        document.getElementById('progFill').style.width = '100%';
-        
-        renderTable(games);
-        stopSystem(true);
-        log(`Sucesso! ${games.length} jogos gerados.`, 'ok');
-    }
-
-    function stopSystem(success) {
-        const btn = document.getElementById('btnRun');
-        btn.disabled = false;
-        btn.innerText = "GERAR MATRIZ";
-        
-        const badge = document.getElementById('statusTag');
-        if (success) {
-            badge.innerText = "SUCESSO";
-            badge.style.color = "#10b981";
-            document.getElementById('btnCsv').style.display = 'inline-block';
-        } else {
-            badge.innerText = "ERRO";
-            badge.style.color = "#ef4444";
-        }
-    }
-
-    function renderTable(games) {
+    renderTable: function(games) {
         const tbody = document.getElementById('resBody');
-        const limit = 200; 
         let html = '';
-        games.slice(0, limit).forEach((g, i) => {
-            const balls = g.map(n => `<span class="ball">${n}</span>`).join('');
-            html += `<tr><td style="color:#aaa">${i+1}</td><td>${balls}</td></tr>`;
+        const limit = 100;
+        
+        games.slice(0, limit).forEach((row, i) => {
+            const balls = row.map(n => `<span class="ball">${n}</span>`).join('');
+            html += `<tr>
+                <td style="color:var(--text-dim);">${i+1}</td>
+                <td>${balls}</td>
+            </tr>`;
         });
+        
         if (games.length > limit) {
-            html += `<tr><td colspan="2" style="text-align:center; padding:10px;">... + ${games.length - limit} jogos ocultos ...</td></tr>`;
+            html += `<tr><td colspan="2" style="text-align:center; color:var(--text-dim); padding:10px;">... + ${games.length - limit} jogos ocultos ...</td></tr>`;
         }
         tbody.innerHTML = html;
-    }
+    },
 
-    function downloadCsv() {
-        if (!gamesData.length) return;
-        let csv = "JOGO;DEZENAS\n";
-        gamesData.forEach((g, i) => csv += `${i+1};${g.join(';')}\n`);
-        
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
+    export: function() {
+        if (!this.data.length) return;
+        let csv = "ID;Bolas\n";
+        this.data.forEach((row, i) => {
+            csv += `${i+1};${row.join(';')}\n`;
+        });
+        const url = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
         const a = document.createElement('a');
         a.href = url;
-        a.download = "Fechamento_LotoV6.csv";
+        a.download = 'LotoEngine_V7.csv';
         a.click();
+    },
+
+    log: function(msg) {
+        document.getElementById('consoleLog').innerText = "> " + msg;
+    },
+
+    setRunning: function(active) {
+        const btn = document.getElementById('btnRun');
+        if (active) {
+            btn.disabled = true;
+            btn.innerText = "CALCULANDO...";
+            document.getElementById('btnCsv').style.display = 'none';
+        } else {
+            btn.disabled = false;
+            btn.innerText = "PROCESSAR AGORA";
+        }
     }
+};
+
+Controller.init();
 </script>
 </body>
 </html>
